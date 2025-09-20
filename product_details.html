@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blackheart Emporium - Product Details</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&family=EB+Garamond:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'EB Garamond', serif;
+            background-color: #0a0a1a;
+            color: #f5ebd7;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, .heading-font {
+            font-family: 'Uncial Antiqua', cursive;
+        }
+
+        #bg-canvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+        }
+
+        .parchment-card {
+            background: rgba(245, 235, 215, 0.8);
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(218, 165, 32, 0.4);
+            color: #4b3a26;
+        }
+
+        .pirate-input {
+            background-color: rgba(181, 153, 119, 0.3); border: 1px solid #8B4513;
+            border-radius: 8px; padding: 0.75rem; color: #4b3a26; width: 100%;
+        }
+        
+        .pirate-btn {
+            background-color: #5C4033; color: #f5ebd7;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
+        }
+        .pirate-btn:hover { background-color: #7a5a4a; transform: translateY(-2px); }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <canvas id="bg-canvas"></canvas>
+
+    <header class="p-8 text-center">
+        <a href="index.html" class="text-4xl text-white tracking-wider heading-font hover:text-amber-300 transition-colors">BLACKHEART</a>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+        <div id="product-not-found" class="hidden text-center text-white">
+            <h1 class="text-4xl">Treasure Lost at Sea</h1>
+            <p class="mt-4 text-xl">We couldn't find the plunder you're looking for.</p>
+            <a href="index.html" class="mt-8 inline-block pirate-btn font-bold py-3 px-6 rounded-lg text-lg">Return to Port</a>
+        </div>
+        
+        <div id="product-container" class="parchment-card rounded-2xl overflow-hidden grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 p-8 md:p-12">
+            <!-- Product Image -->
+            <div>
+                <img id="product-image" src="https://placehold.co/600x600/333/fff?text=Loading..." alt="Product Image" class="w-full h-auto object-cover rounded-lg shadow-lg">
+            </div>
+
+            <!-- Product Details -->
+            <div class="flex flex-col">
+                <h1 id="product-name" class="text-4xl md:text-5xl font-bold tracking-wide">Product Name</h1>
+                <p id="product-price" class="text-4xl font-bold my-6 text-amber-900 heading-font">Price</p>
+                <p id="product-description" class="text-base leading-relaxed text-gray-700">Detailed description of the finest pirate booty, guaranteed to be of the highest quality for all your seafaring adventures and treasure-hunting needs.</p>
+                
+                <div class="actions mt-auto pt-8 space-y-4">
+                    <div>
+                        <label for="qty" class="block text-sm font-medium mb-1">Quantity:</label>
+                        <input type="number" id="qty" value="1" min="1" class="pirate-input" />
+                    </div>
+
+                    <div class="grid grid-cols-1">
+                        <button id="add-to-cart-btn" class="pirate-btn font-bold py-4 px-4 rounded-lg text-lg">🏴‍☠ Add to Cart & Checkout</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-8">
+            <a href="index.html" class="text-amber-200 hover:text-white transition-colors">&larr; Back to All Wares</a>
+        </div>
+    </main>
+
+    <footer class="text-center text-gray-400 py-12 px-4">
+        <p>© 2025 BLACKHEART • All Rights Plundered • Sail Responsibly</p>
+    </footer>
+
+    <script>
+        // --- PRODUCT DATABASE (Must match index.html) ---
+        const productData = [
+            { id: 'prod1', name: "Kraken-Engraved Cutlass", price: 180.00, image: 'assets/product1.png', description: "A masterfully crafted cutlass with an intricate Kraken engraving on the hilt. Perfectly balanced for duels on the deck." },
+            { id: 'prod2', name: "Cursed Aztec Doubloon", price: 999.99, image: 'assets/product2.png', description: "A single, cursed piece of Aztec gold. Not for the faint of heart. Side effects may include immortality and a craving for apples." },
+            { id: 'prod3', name: "Spyglass of the Far Seer", price: 120.50, image: 'assets/product3.png', description: "This enchanted spyglass can see through fog and storms, revealing ships and shores that are miles away." },
+            { id: 'prod4', name: "Captain Blackheart's Rum", price: 45.00, image: 'assets/product4.png', description: "Aged for 20 years in cursed barrels. The strongest, most flavorful rum you'll ever have the pleasure of tasting." },
+            { id: 'prod5', name: "The Navigator's Astrolabe", price: 350.00, image: 'assets/product5.png', description: "An ancient device that uses the stars to plot a true course, no matter how lost you are. Never get lost again." },
+            { id: 'prod6', name: "Gunpowder Horn", price: 35.75, image: 'assets/product6.png', description: "A finely crafted powder horn to keep your black powder dry and ready for battle. An essential for any pirate." },
+            { id: 'prod7', name: "Leather Eye Patch", price: 15.00, image: 'assets/product7.png', description: "Made from the finest leather, this eye patch is both comfortable and intimidating. A classic pirate accessory." },
+            { id: 'prod8', name: "Ship-in-a-Bottle", price: 75.00, image: 'assets/product8.png', description: "A beautifully detailed model of the infamous ship, 'The Sea Serpent', perfectly preserved in a bottle." },
+            { id: 'prod9', name: "Jolly Roger Flag", price: 39.99, image: 'assets/product9.png', description: "Hoist the colors and strike fear into the hearts of merchant ships. Made of durable, weather-resistant canvas." },
+            { id: 'prod10', name: "Pirate Bandana", price: 22.00, image: 'assets/product10.png', description: "A silk bandana emblazoned with skulls and crossbones. Keeps the sweat from your brow during intense sword fights." },
+            { id: 'prod11', name: "Flintlock Pistol Replica", price: 210.00, image: 'assets/product11.png', description: "A non-firing, but incredibly detailed replica of a classic flintlock pistol. Perfect for costumes or display." },
+            { id: 'prod12', name: "Treasure Chest", price: 450.00, image: 'assets/product12.png', description: "A sturdy, iron-bound chest to keep your doubloons and jewels safe from prying eyes. Comes with a heavy-duty lock." },
+            { id: 'prod13', name: "Anchor Pendant", price: 65.00, image: 'assets/product13.png', description: "A solid silver anchor pendant on a leather cord. A symbol of stability and strength on the high seas." },
+            { id: 'prod14', name: "Message in a Bottle Kit", price: 29.50, image: 'assets/product14.png', description: "Send a message across the ocean with this kit, complete with parchment, a quill, ink, and a corked bottle." },
+            { id: 'prod15', name: "Maritime Compass", price: 88.00, image: 'assets/product15.png', description: "A reliable brass compass that will always point true north, even in the most mystical of waters." },
+            { id: 'prod16', name: "Set of Iron Shackles", price: 55.00, image: 'assets/product16.png', description: "Authentic, heavy-duty iron shackles. For prisoners, or for decorating your captain's quarters with a touch of authority." },
+        ];
+
+        // --- DYNAMIC CONTENT LOADER ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+            const product = productData.find(p => p.id === productId);
+
+            if (product) {
+                document.getElementById('product-name').textContent = product.name;
+                document.getElementById('product-price').textContent = `$${product.price.toFixed(2)}`;
+                document.getElementById('product-description').textContent = product.description;
+                document.getElementById('product-image').src = product.image;
+                document.getElementById('product-image').alt = product.name;
+                document.title = `Blackheart — ${product.name}`;
+
+                const addToCartBtn = document.getElementById('add-to-cart-btn');
+                addToCartBtn.onclick = () => {
+                    const quantity = parseInt(document.getElementById('qty').value) || 1;
+                    
+                    let cart = JSON.parse(localStorage.getItem('shoppingCart')) || [];
+                    const existingProductIndex = cart.findIndex(item => item.id === product.id);
+
+                    if (existingProductIndex > -1) {
+                        cart[existingProductIndex].quantity += quantity;
+                    } else {
+                        cart.push({ ...product, quantity: quantity });
+                    }
+                    
+                    localStorage.setItem('shoppingCart', JSON.stringify(cart));
+                    window.location.href = 'checkout.html';
+                };
+
+            } else {
+                document.getElementById('product-container').classList.add('hidden');
+                document.getElementById('product-not-found').classList.remove('hidden');
+            }
+        });
+
+        // --- ANIMATED BACKGROUND SCRIPT ---
+        window.onload = function() {
+            const canvas = document.getElementById('bg-canvas');
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+
+            const particleCount = 2500;
+            const positions = new Float32Array(particleCount * 3);
+            const colors = new Float32Array(particleCount * 3);
+            const colorChoices = [new THREE.Color(0xffe58a), new THREE.Color(0x87ceeb), new THREE.Color(0xffffff)];
+
+            for (let i = 0; i < particleCount; i++) {
+                positions[i * 3] = (Math.random() - 0.5) * 25;
+                positions[i * 3 + 1] = (Math.random() - 0.5) * 25;
+                positions[i * 3 + 2] = (Math.random() - 0.5) * 25;
+                const color = colorChoices[Math.floor(Math.random() * colorChoices.length)];
+                colors[i*3] = color.r; colors[i*3+1] = color.g; colors[i*3+2] = color.b;
+            }
+
+            const particles = new THREE.BufferGeometry();
+            particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            particles.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+            const particleMaterial = new THREE.PointsMaterial({ size: 0.03, vertexColors: true, transparent: true, opacity: 0.6 });
+            const particleSystem = new THREE.Points(particles, particleMaterial);
+            scene.add(particleSystem);
+            camera.position.z = 7;
+
+            const mouse = new THREE.Vector2();
+            document.addEventListener('mousemove', (event) => {
+                mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+                mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+            });
+            
+            function animate() {
+                requestAnimationFrame(animate);
+                particleSystem.rotation.y += 0.0001;
+                camera.position.x += (mouse.x * 0.2 - camera.position.x) * 0.02;
+                camera.position.y += (mouse.y * 0.2 - camera.position.y) * 0.02;
+                camera.lookAt(scene.position);
+                renderer.render(scene, camera);
+            }
+            animate();
+
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+});
+        };
+    </script>
+</body>
+</html>
+
