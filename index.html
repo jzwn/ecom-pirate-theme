@@ -5,13 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modern E-commerce Page</title>
     
-    <!-- Tailwind CSS for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- UX4G CSS (Restored) -->
     <link href="https://cdn.ux4g.gov.in/UX4G@2.0.8/css/ux4g-min.css" rel="stylesheet">
-    
-    <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -19,7 +14,7 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-image: url('https://images.unsplash.com/photo-1619468129361-605ebea04b44?q=80&w=2864&auto=format&fit=crop');
+            background-image: url('https://images.unsplash.com/photo-1619468129361-605ebea04b44?q=80&w=2864&auto-format&fit=crop');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -29,77 +24,54 @@
             transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
-        
-        .nav-link {
-            position: relative;
-            transition: color 0.3s ease;
-        }
-
         .nav-link::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -4px;
-            left: 50%;
-            background-color: #ffffff;
-            transition: all 0.3s ease-in-out;
-            transform: translateX(-50%);
+            content: ''; position: absolute; width: 0; height: 2px;
+            bottom: -4px; left: 50%; background-color: #ffffff;
+            transition: all 0.3s ease-in-out; transform: translateX(-50%);
         }
-
-        .nav-link:hover::after {
-            width: 100%;
+        .nav-link:hover::after { width: 100%; }
+        #mobile-menu { transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out; }
+        
+        /* Off-white glassmorphism style for product cards */
+        .product-card {
+            background: rgba(249, 250, 251, 0.9);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-
-        #mobile-menu {
-            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px 0 rgba(0, 0, 0, 0.2);
         }
     </style>
 </head>
 <body class="min-h-screen">
 
     <header id="header-container" class="fixed top-0 left-0 right-0 z-50 p-4">
+        <!-- The header code remains the same... -->
         <div class="max-w-7xl mx-auto">
             <div class="bg-white/20 backdrop-blur-xl border border-white/30 rounded-2xl shadow-xl px-4 sm:px-6 lg:px-8">
                 <nav class="flex items-center justify-between h-20">
-                    <div class="flex-shrink-0">
-                        <a href="#" class="text-2xl font-bold text-white tracking-wider">AURA</a>
-                    </div>
-
+                    <div class="flex-shrink-0"><a href="#" class="text-2xl font-bold text-white tracking-wider">AURA</a></div>
                     <div class="hidden md:flex md:items-center md:space-x-8">
                         <a href="#" class="nav-link text-gray-200 hover:text-white font-medium">Home</a>
                         <a href="#" class="nav-link text-gray-200 hover:text-white font-medium">Shop</a>
-                        <a href="#" class="nav-link text-gray-200 hover:text-white font-medium">New Arrivals</a>
-                        <a href="#" class="nav-link text-gray-200 hover:text-white font-medium">About Us</a>
+                        <a href="checkout.html" class="nav-link text-gray-200 hover:text-white font-medium">Checkout</a>
                     </div>
-                    
                     <div class="md:hidden flex items-center">
                         <button id="mobile-menu-button" class="inline-flex items-center justify-center p-2 rounded-md text-white hover:bg-white/20 focus:outline-none">
-                            <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-                            </svg>
+                            <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>
                         </button>
                     </div>
                 </nav>
             </div>
-
-            <div id="mobile-menu" class="md:hidden hidden opacity-0 transform -translate-y-4 mt-2">
-                <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white/30 backdrop-blur-xl rounded-xl shadow-lg">
-                    <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-white/20">Home</a>
-                    <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-white/20">Shop</a>
-                    <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-white/20">New Arrivals</a>
-                    <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-white/20">About Us</a>
-                </div>
-            </div>
-
             <div id="search-container" class="mt-4">
                 <form class="relative w-full max-w-lg mx-auto">
                     <div class="relative flex items-center w-full bg-white/20 backdrop-blur-xl border border-white/30 rounded-full shadow-xl overflow-hidden">
                         <input type="search" placeholder="Search for products..." class="w-full h-14 pl-6 pr-14 bg-transparent text-white placeholder-gray-200 border-none outline-none focus:ring-0 text-lg">
                         <button type="submit" class="absolute right-0 top-0 h-14 w-14 flex items-center justify-center text-white/80 hover:bg-white/20 rounded-full transition-colors duration-300">
-                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                            </svg>
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                         </button>
                     </div>
                 </form>
@@ -108,55 +80,114 @@
     </header>
 
     <main class="pt-52">
-        <div class="h-[300vh] p-10">
-            <div class="max-w-4xl mx-auto text-center mt-24">
+        <div class="h-[150vh] p-10">
+            <div class="max-w-4xl mx-auto text-center">
                 <h1 class="text-5xl md:text-7xl font-bold text-white tracking-tight" style="text-shadow: 2px 2px 8px rgba(0,0,0,0.6);">
                     Modern Shopping Experience
                 </h1>
                 <p class="mt-6 text-lg md:text-xl text-gray-200" style="text-shadow: 1px 1px 4px rgba(0,0,0,0.7);">
-                    Scroll down. The entire header will hide.
+                    Discover products chosen for the modern lifestyle.
                 </p>
             </div>
+
+            <!-- NEW: Product Section -->
+            <section id="products" class="max-w-7xl mx-auto mt-24 sm:mt-32">
+                <h2 class="text-center text-4xl font-bold text-white tracking-tight mb-12">Explore Our Products</h2>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    
+                    <!-- Product 1 -->
+                    <div class="product-card rounded-2xl overflow-hidden flex flex-col">
+                        <a href="product_details.html?id=prod001" class="block">
+                            <img class="w-full h-64 object-cover" src="assets/product1.png" alt="Minimalist Chair">
+                        </a>
+                        <div class="p-6 text-gray-800 flex-grow flex flex-col">
+                            <h3 class="text-xl font-semibold mb-2">Minimalist Chair</h3>
+                            <p class="text-lg font-bold mb-4">$120.00</p>
+                            <button onclick="addToCart('prod001', 'Minimalist Chair', 120.00, 'https://images.unsplash.com/photo-1592078615290-033ee584e267?q=80&w=2160&auto=format&fit=crop')" class="mt-auto w-full bg-indigo-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-indigo-600 transition-all duration-300">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Product 2 -->
+                    <div class="product-card rounded-2xl overflow-hidden flex flex-col">
+                        <a href="product_details.html?id=prod002" class="block">
+                             <img class="w-full h-64 object-cover" src="assets/product2.png" alt="Modern Vase Set">
+                        </a>
+                        <div class="p-6 text-gray-800 flex-grow flex flex-col">
+                            <h3 class="text-xl font-semibold mb-2">Modern Vase Set</h3>
+                            <p class="text-lg font-bold mb-4">$45.50</p>
+                            <button onclick="addToCart('prod002', 'Modern Vase Set', 45.50, 'https://images.unsplash.com/photo-1619947214531-62acbfd49454?q=80&w=2187&auto=format&fit=crop')" class="mt-auto w-full bg-indigo-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-indigo-600 transition-all duration-300">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Product 3 -->
+                    <div class="product-card rounded-2xl overflow-hidden flex flex-col">
+                        <a href="product_details.html?id=prod003" class="block">
+                           <img class="w-full h-64 object-cover" src="assets/product3.png" alt="Abstract Wall Art">
+                        </a>
+                        <div class="p-6 text-gray-800 flex-grow flex flex-col">
+                            <h3 class="text-xl font-semibold mb-2">Abstract Wall Art</h3>
+                            <p class="text-lg font-bold mb-4">$89.99</p>
+                            <button onclick="addToCart('prod003', 'Abstract Wall Art', 89.99, 'https://images.unsplash.com/photo-1554302243-715c1e6a25d2?q=80&w=2187&auto=format&fit=crop')" class="mt-auto w-full bg-indigo-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-indigo-600 transition-all duration-300">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Product 4 -->
+                    <div class="product-card rounded-2xl overflow-hidden flex flex-col">
+                         <a href="product_details.html?id=prod004" class="block">
+                           <img class="w-full h-64 object-cover" src="https://images.unsplash.com/photo-1540932239986-30128078f3c5?q=80&w=2187&auto=format&fit=crop" alt="Smart Desk Lamp">
+                        </a>
+                        <div class="p-6 text-gray-800 flex-grow flex flex-col">
+                            <h3 class="text-xl font-semibold mb-2">Smart Desk Lamp</h3>
+                            <p class="text-lg font-bold mb-4">$75.00</p>
+                            <button onclick="addToCart('prod004', 'Smart Desk Lamp', 75.00, 'https://images.unsplash.com/photo-1540932239986-30128078f3c5?q=80&w=2187&auto=format&fit=crop')" class="mt-auto w-full bg-indigo-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-indigo-600 transition-all duration-300">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </div>
     </main>
 
     <script>
+        // --- SCRIPT FOR HEADER ---
         document.addEventListener('DOMContentLoaded', () => {
             const headerContainer = document.getElementById('header-container');
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
-            const mobileMenu = document.getElementById('mobile-menu');
             let lastScrollY = window.scrollY;
-
             window.addEventListener('scroll', () => {
-                const currentScrollY = window.scrollY;
-                if (currentScrollY > lastScrollY && currentScrollY > 100) {
+                if (window.scrollY > lastScrollY && window.scrollY > 100) {
                     headerContainer.style.transform = 'translateY(-150%)';
                 } else {
                     headerContainer.style.transform = 'translateY(0)';
                 }
-                lastScrollY = currentScrollY;
-            });
-
-            mobileMenuButton.addEventListener('click', () => {
-                const isHidden = mobileMenu.classList.contains('hidden');
-                if (isHidden) {
-                    mobileMenu.classList.remove('hidden');
-                    setTimeout(() => {
-                        mobileMenu.classList.remove('opacity-0', '-translate-y-4');
-                    }, 10);
-                } else {
-                    mobileMenu.classList.add('opacity-0', '-translate-y-4');
-                    setTimeout(() => {
-                        mobileMenu.classList.add('hidden');
-                    }, 300);
-                }
+                lastScrollY = window.scrollY;
             });
         });
+        
+        // --- SCRIPT FOR ADDING TO CART ---
+        function addToCart(productId, productName, productPrice, productImage) {
+            let cart = JSON.parse(localStorage.getItem('shoppingCart')) || [];
+            const existingProductIndex = cart.findIndex(item => item.id === productId);
+
+            if (existingProductIndex > -1) {
+                cart[existingProductIndex].quantity += 1;
+            } else {
+                cart.push({ id: productId, name: productName, price: productPrice, image: productImage, quantity: 1 });
+            }
+            localStorage.setItem('shoppingCart', JSON.stringify(cart));
+            
+            // Simple feedback; could be replaced with a more elegant notification
+            alert(`${productName} has been added to your cart!`);
+        }
     </script>
-
-    <!-- UX4G JS (Restored) -->
     <script src="https://cdn.ux4g.gov.in/UX4G@2.0.8/js/ux4g.min.js"></script>
-
 </body>
 </html>
 
