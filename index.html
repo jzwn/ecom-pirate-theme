@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modern E-commerce Page</title>
+    <title>Blackheart - A Pirate's Emporium</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <link href="https://cdn.ux4g.gov.in/UX4G@2.0.8/css/ux4g-min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,10 +15,18 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-image: url('https://images.unsplash.com/photo-1619468129361-605ebea04b44?q=80&w=2864&auto-format&fit=crop');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
+            /* Dark background color for the animated canvas */
+            background-color: #0a0a1a;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Place canvas behind everything */
         }
 
         #header-container {
@@ -32,11 +41,10 @@
         .nav-link:hover::after { width: 100%; }
         #mobile-menu { transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out; }
         
-        /* Off-white glassmorphism style for product cards */
         .product-card {
-            background: rgba(249, 250, 251, 0.9);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: rgba(249, 250, 251, 0.85); /* Slightly less opaque for better effect */
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.2);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
@@ -48,16 +56,17 @@
 </head>
 <body class="min-h-screen">
 
+    <canvas id="bg-canvas"></canvas>
+
     <header id="header-container" class="fixed top-0 left-0 right-0 z-50 p-4">
-        <!-- The header code remains the same... -->
         <div class="max-w-7xl mx-auto">
-            <div class="bg-white/20 backdrop-blur-xl border border-white/30 rounded-2xl shadow-xl px-4 sm:px-6 lg:px-8">
+            <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-xl px-4 sm:px-6 lg:px-8">
                 <nav class="flex items-center justify-between h-20">
-                    <div class="flex-shrink-0"><a href="#" class="text-2xl font-bold text-white tracking-wider">AURA</a></div>
+                    <div class="flex-shrink-0"><a href="#" class="text-2xl font-bold text-white tracking-wider">BLACKHEART</a></div>
                     <div class="hidden md:flex md:items-center md:space-x-8">
                         <a href="#" class="nav-link text-gray-200 hover:text-white font-medium">Home</a>
-                        <a href="#" class="nav-link text-gray-200 hover:text-white font-medium">Shop</a>
-                        <a href="checkout.html" class="nav-link text-gray-200 hover:text-white font-medium">Checkout</a>
+                        <a href="#" class="nav-link text-gray-200 hover:text-white font-medium">Wares</a>
+                        <a href="checkout.html" class="nav-link text-gray-200 hover:text-white font-medium">Cart</a>
                     </div>
                     <div class="md:hidden flex items-center">
                         <button id="mobile-menu-button" class="inline-flex items-center justify-center p-2 rounded-md text-white hover:bg-white/20 focus:outline-none">
@@ -68,8 +77,8 @@
             </div>
             <div id="search-container" class="mt-4">
                 <form class="relative w-full max-w-lg mx-auto">
-                    <div class="relative flex items-center w-full bg-white/20 backdrop-blur-xl border border-white/30 rounded-full shadow-xl overflow-hidden">
-                        <input type="search" placeholder="Search for products..." class="w-full h-14 pl-6 pr-14 bg-transparent text-white placeholder-gray-200 border-none outline-none focus:ring-0 text-lg">
+                    <div class="relative flex items-center w-full bg-white/10 backdrop-blur-xl border border-white/20 rounded-full shadow-xl overflow-hidden">
+                        <input type="search" placeholder="Search for treasure..." class="w-full h-14 pl-6 pr-14 bg-transparent text-white placeholder-gray-300 border-none outline-none focus:ring-0 text-lg">
                         <button type="submit" class="absolute right-0 top-0 h-14 w-14 flex items-center justify-center text-white/80 hover:bg-white/20 rounded-full transition-colors duration-300">
                             <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                         </button>
@@ -80,75 +89,79 @@
     </header>
 
     <main class="pt-52">
-        <div class="h-[150vh] p-10">
+        <div class="min-h-screen p-10">
             <div class="max-w-4xl mx-auto text-center">
                 <h1 class="text-5xl md:text-7xl font-bold text-white tracking-tight" style="text-shadow: 2px 2px 8px rgba(0,0,0,0.6);">
-                    Modern Shopping Experience
+                    Treasures of the Seven Seas
                 </h1>
                 <p class="mt-6 text-lg md:text-xl text-gray-200" style="text-shadow: 1px 1px 4px rgba(0,0,0,0.7);">
-                    Discover products chosen for the modern lifestyle.
+                    Outfit Your Crew with the Finest Pirate Gear.
                 </p>
             </div>
 
-            <!-- NEW: Product Section -->
             <section id="products" class="max-w-7xl mx-auto mt-24 sm:mt-32">
-                <h2 class="text-center text-4xl font-bold text-white tracking-tight mb-12">Explore Our Products</h2>
+                <h2 class="text-center text-4xl font-bold text-white tracking-tight mb-12">Featured Plunder</h2>
                 
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                     
-                    <!-- Product 1 -->
                     <div class="product-card rounded-2xl overflow-hidden flex flex-col">
-                        <a href="product_details.html?id=prod001" class="block">
-                            <img class="w-full h-64 object-cover" src="assets/product1.png" alt="Minimalist Chair">
+                        <a href="product_details.html?id=pirate001" class="block bg-gray-200 p-4">
+                            <svg class="w-full h-64 object-contain text-gray-600" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+                                <path d="M20,90 L20,70 Q20,60 30,60 L70,60 Q80,60 80,70 L80,90 Z" fill="none" stroke="currentColor" stroke-width="3"/>
+                                <path d="M20,70 L15,30 Q15,10 50,10 Q85,10 85,30 L80,70" fill="none" stroke="currentColor" stroke-width="3"/>
+                                <rect x="15" y="65" width="70" height="10" fill="currentColor"/>
+                                <circle cx="15" cy="60" r="5" fill="currentColor"/><circle cx="85" cy="60" r="5" fill="currentColor"/>
+                            </svg>
                         </a>
                         <div class="p-6 text-gray-800 flex-grow flex flex-col">
-                            <h3 class="text-xl font-semibold mb-2">Minimalist Chair</h3>
-                            <p class="text-lg font-bold mb-4">$120.00</p>
-                            <button onclick="addToCart('prod001', 'Minimalist Chair', 120.00, 'https://images.unsplash.com/photo-1592078615290-033ee584e267?q=80&w=2160&auto=format&fit=crop')" class="mt-auto w-full bg-indigo-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-indigo-600 transition-all duration-300">
-                                Add to Cart
-                            </button>
+                            <h3 class="text-xl font-semibold mb-2">Captain's Throne</h3><p class="text-lg font-bold mb-4">$450.00</p>
+                            <button onclick="addToCart('pirate001', 'Captain\'s Throne', 450.00, '')" class="mt-auto w-full bg-indigo-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-indigo-600 transition-all duration-300">Add to Cart</button>
                         </div>
                     </div>
 
-                    <!-- Product 2 -->
                     <div class="product-card rounded-2xl overflow-hidden flex flex-col">
-                        <a href="product_details.html?id=prod002" class="block">
-                             <img class="w-full h-64 object-cover" src="assets/product2.png" alt="Modern Vase Set">
+                        <a href="product_details.html?id=pirate002" class="block bg-gray-200 p-4">
+                            <svg class="w-full h-64 object-contain text-gray-600" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+                                <rect x="15" y="10" width="70" height="80" rx="5" fill="#e6ccaa" stroke="currentColor" stroke-width="2"/>
+                                <path d="M30 30 L45 45 L35 60 L65 70" fill="none" stroke-dasharray="3,3" stroke="#a0522d" stroke-width="2"/>
+                                <path d="M60 65 L70 75 M70 65 L60 75" stroke="red" stroke-width="4"/>
+                            </svg>
                         </a>
                         <div class="p-6 text-gray-800 flex-grow flex flex-col">
-                            <h3 class="text-xl font-semibold mb-2">Modern Vase Set</h3>
-                            <p class="text-lg font-bold mb-4">$45.50</p>
-                            <button onclick="addToCart('prod002', 'Modern Vase Set', 45.50, 'https://images.unsplash.com/photo-1619947214531-62acbfd49454?q=80&w=2187&auto=format&fit=crop')" class="mt-auto w-full bg-indigo-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-indigo-600 transition-all duration-300">
-                                Add to Cart
-                            </button>
+                            <h3 class="text-xl font-semibold mb-2">Ancient Treasure Map</h3><p class="text-lg font-bold mb-4">$85.50</p>
+                            <button onclick="addToCart('pirate002', 'Ancient Treasure Map', 85.50, '')" class="mt-auto w-full bg-indigo-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-indigo-600 transition-all duration-300">Add to Cart</button>
                         </div>
                     </div>
 
-                    <!-- Product 3 -->
                     <div class="product-card rounded-2xl overflow-hidden flex flex-col">
-                        <a href="product_details.html?id=prod003" class="block">
-                           <img class="w-full h-64 object-cover" src="assets/product3.png" alt="Abstract Wall Art">
+                        <a href="product_details.html?id=pirate003" class="block bg-gray-200 p-4">
+                            <svg class="w-full h-64 object-contain text-gray-800" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+                                <rect x="10" y="10" width="80" height="50" fill="black"/>
+                                <circle cx="50" cy="30" r="10" fill="white"/>
+                                <path d="M40 25 C40 20 60 20 60 25" fill="white"/>
+                                <path d="M35 50 L65 40 M35 40 L65 50" stroke="white" stroke-width="4"/>
+                                <path d="M10 10 L10 90" fill="none" stroke="currentColor" stroke-width="3"/>
+                            </svg>
                         </a>
                         <div class="p-6 text-gray-800 flex-grow flex flex-col">
-                            <h3 class="text-xl font-semibold mb-2">Abstract Wall Art</h3>
-                            <p class="text-lg font-bold mb-4">$89.99</p>
-                            <button onclick="addToCart('prod003', 'Abstract Wall Art', 89.99, 'https://images.unsplash.com/photo-1554302243-715c1e6a25d2?q=80&w=2187&auto=format&fit=crop')" class="mt-auto w-full bg-indigo-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-indigo-600 transition-all duration-300">
-                                Add to Cart
-                            </button>
+                            <h3 class="text-xl font-semibold mb-2">Jolly Roger Flag</h3><p class="text-lg font-bold mb-4">$39.99</p>
+                            <button onclick="addToCart('pirate003', 'Jolly Roger Flag', 39.99, '')" class="mt-auto w-full bg-indigo-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-indigo-600 transition-all duration-300">Add to Cart</button>
                         </div>
                     </div>
 
-                    <!-- Product 4 -->
                     <div class="product-card rounded-2xl overflow-hidden flex flex-col">
-                         <a href="product_details.html?id=prod004" class="block">
-                           <img class="w-full h-64 object-cover" src="https://images.unsplash.com/photo-1540932239986-30128078f3c5?q=80&w=2187&auto=format&fit=crop" alt="Smart Desk Lamp">
+                         <a href="product_details.html?id=pirate004" class="block bg-gray-200 p-4">
+                            <svg class="w-full h-64 object-contain text-gray-600" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+                                <path d="M40 20 Q50 10 60 20 Z" fill="currentColor"/>
+                                <rect x="30" y="20" width="40" height="50" rx="5" fill="none" stroke="currentColor" stroke-width="3"/>
+                                <rect x="35" y="25" width="30" height="40" fill="#ffec8b" opacity="0.7"/>
+                                <path d="M50 20 L50 10" stroke="currentColor" stroke-width="3"/>
+                                <rect x="25" y="70" width="50" height="10" rx="3" fill="currentColor"/>
+                            </svg>
                         </a>
                         <div class="p-6 text-gray-800 flex-grow flex flex-col">
-                            <h3 class="text-xl font-semibold mb-2">Smart Desk Lamp</h3>
-                            <p class="text-lg font-bold mb-4">$75.00</p>
-                            <button onclick="addToCart('prod004', 'Smart Desk Lamp', 75.00, 'https://images.unsplash.com/photo-1540932239986-30128078f3c5?q=80&w=2187&auto=format&fit=crop')" class="mt-auto w-full bg-indigo-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-indigo-600 transition-all duration-300">
-                                Add to Cart
-                            </button>
+                            <h3 class="text-xl font-semibold mb-2">Ship's Lantern</h3><p class="text-lg font-bold mb-4">$65.00</p>
+                            <button onclick="addToCart('pirate004', 'Ship\'s Lantern', 65.00, '')" class="mt-auto w-full bg-indigo-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-indigo-600 transition-all duration-300">Add to Cart</button>
                         </div>
                     </div>
                 </div>
@@ -162,12 +175,13 @@
             const headerContainer = document.getElementById('header-container');
             let lastScrollY = window.scrollY;
             window.addEventListener('scroll', () => {
-                if (window.scrollY > lastScrollY && window.scrollY > 100) {
-                    headerContainer.style.transform = 'translateY(-150%)';
+                const currentScrollY = window.scrollY;
+                if (currentScrollY > lastScrollY && currentScrollY > 100) {
+                    headerContainer.style.transform = 'translateY(-128px)'; 
                 } else {
                     headerContainer.style.transform = 'translateY(0)';
                 }
-                lastScrollY = window.scrollY;
+                lastScrollY = currentScrollY;
             });
         });
         
@@ -175,17 +189,67 @@
         function addToCart(productId, productName, productPrice, productImage) {
             let cart = JSON.parse(localStorage.getItem('shoppingCart')) || [];
             const existingProductIndex = cart.findIndex(item => item.id === productId);
-
-            if (existingProductIndex > -1) {
-                cart[existingProductIndex].quantity += 1;
-            } else {
-                cart.push({ id: productId, name: productName, price: productPrice, image: productImage, quantity: 1 });
-            }
+            if (existingProductIndex > -1) cart[existingProductIndex].quantity += 1;
+            else cart.push({ id: productId, name: productName, price: productPrice, image: 'svg_placeholder', quantity: 1 });
             localStorage.setItem('shoppingCart', JSON.stringify(cart));
-            
-            // Simple feedback; could be replaced with a more elegant notification
-            alert(`${productName} has been added to your cart!`);
+            alert(`${productName} has been added to yer cart, matey!`);
         }
+        
+        // --- SCRIPT FOR ANIMATED BACKGROUND ---
+        window.onload = function() {
+            const canvas = document.getElementById('bg-canvas');
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+
+            const particleCount = 5000;
+            const particles = new THREE.BufferGeometry();
+            const positions = new Float32Array(particleCount * 3);
+
+            for (let i = 0; i < particleCount * 3; i++) {
+                positions[i] = (Math.random() - 0.5) * 20;
+            }
+
+            particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            const particleMaterial = new THREE.PointsMaterial({
+                color: 0xaaaaaa,
+                size: 0.02,
+                transparent: true,
+                opacity: 0.7
+            });
+            const particleSystem = new THREE.Points(particles, particleMaterial);
+            scene.add(particleSystem);
+
+            camera.position.z = 5;
+
+            const mouse = new THREE.Vector2();
+            document.addEventListener('mousemove', (event) => {
+                mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+                mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+            });
+            
+            function animate() {
+                requestAnimationFrame(animate);
+
+                particleSystem.rotation.y += 0.0002;
+                particleSystem.rotation.x += 0.0001;
+
+                // Subtle interaction
+                camera.position.x += (mouse.x * 0.5 - camera.position.x) * 0.02;
+                camera.position.y += (mouse.y * 0.5 - camera.position.y) * 0.02;
+                camera.lookAt(scene.position);
+
+                renderer.render(scene, camera);
+            }
+            animate();
+
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        };
     </script>
     <script src="https://cdn.ux4g.gov.in/UX4G@2.0.8/js/ux4g.min.js"></script>
 </body>
